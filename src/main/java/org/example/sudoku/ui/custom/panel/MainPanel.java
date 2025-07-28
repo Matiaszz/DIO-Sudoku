@@ -1,4 +1,4 @@
-package org.example.sudoku.ui.custom.button.panel;
+package org.example.sudoku.ui.custom.panel;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

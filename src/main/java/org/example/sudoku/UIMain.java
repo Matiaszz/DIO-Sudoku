@@ -1,17 +1,20 @@
 package org.example.sudoku;
 
-import org.example.sudoku.ui.custom.button.frame.MainFrame;
-import org.example.sudoku.ui.custom.button.panel.MainPanel;
+import org.example.sudoku.ui.custom.screen.MainScreen;
 
-import javax.swing.*;
-import java.awt.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UIMain {
     public static void main(String[] args) {
-        Dimension dimension = new Dimension(600, 600);
-        JPanel panel = new MainPanel(dimension);
-        JFrame main = new MainFrame(dimension, panel);
-        main.revalidate();
-        main.repaint();
+        final var gameConfig = Stream.of(args)
+                .collect(Collectors.toMap(
+                        k -> k.split(";")[0],
+                        v-> v.split(";")[1]
+                ));
+        MainScreen mainScreen = new MainScreen(gameConfig);
+        mainScreen.buildMainScreen();
+
+        int option = -1;
     }
 }

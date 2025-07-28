@@ -1,4 +1,4 @@
-package org.example.sudoku.ui.custom.button.frame;
+package org.example.sudoku.ui.custom.frame;
 
 import javax.swing.*;
 import java.awt.*;
