@@ -51,7 +51,7 @@ public class Board {
     }
 
     public void reset(){
-        spaces.stream().flatMap(Collection::stream).forEach(Space::clearSpace);
+        spaces.forEach(c -> c.forEach(Space::clearSpace));
     }
 
     public boolean gameIsFinished(){

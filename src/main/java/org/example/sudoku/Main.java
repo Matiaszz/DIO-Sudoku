@@ -2,6 +2,7 @@ package org.example.sudoku;
 
 import org.example.sudoku.model.Board;
 import org.example.sudoku.model.Space;
+import org.example.sudoku.util.BoardTemplate;
 
 import java.sql.Array;
 import java.util.*;
@@ -90,9 +91,9 @@ public class Main {
             System.out.println("The game already wasn't started.");
             return;
         }
-
-        int col = getColAndRow().getFirst();
-        int row = getColAndRow().getLast();
+        List<Integer> colAndRow = getColAndRow();
+        int col = colAndRow.getFirst();
+        int row = colAndRow.getLast();
 
         System.out.printf("Type the number that will stay in position: [%d / %d]\n", col, row);
 
@@ -110,31 +111,86 @@ public class Main {
             return;
         }
 
-
-        int col = getColAndRow().getFirst();
-        int row = getColAndRow().getLast();
+        List<Integer> colAndRow = getColAndRow();
+        int col = colAndRow.getFirst();
+        int row = colAndRow.getLast();
 
         if (!board.clearValue(col, row)){
             System.out.printf("The position [%d / %d] has a fixed value", col, row);
         }
+    }
 
+    private static void showCurrentGame() {
+        if (isNull(board)) {
+            System.out.println("The game already wasn't started.");
+            return;
+        }
 
+        var args = new Object[81];
+        var argPos = 0;
+
+        for (int i = 0; i < BOARD_LIMIT; i++) {
+            for (List<Space> col : board.getSpaces()){
+                args[argPos ++] = " " + (isNull(col.get(i).getActual()) ? " " : col.get(i).getActual());
+            }
+        }
+
+        System.out.println("Here are you current game: ");
+        System.out.printf((BoardTemplate.BOARD_TEMPLATE) + "\n", args);
+    }
+
+    private static void showGameStatus() {
+        if (isNull(board)) {
+            System.out.println("The game wasn't started.");
+            return;
+        }
+
+        System.out.printf("The game status is: %s\n", board.getStatus().getLabel());
+        if (board.hasErrors()){
+            System.out.println("Contain errors in the game.");
+            return;
+        }
+
+        System.out.println("The game don't contains any error");
+    }
+
+    private static void clearGame() {
+        if (isNull(board)) {
+            System.out.println("The game already wasn't started.");
+            return;
+        }
+
+        String msg = "Are you sure that you want to clear your game and lost all your progress (Y/N)?";
+        System.out.println(msg);
+        var confirm = sc.next();
+
+        while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n")){
+            System.out.println("Unknown option");
+            confirm = sc.next();
+        }
+
+        if (confirm.equalsIgnoreCase("y")){
+            board.reset();
+        }
 
     }
 
     private static void finishGame() {
+        if (isNull(board)) {
+            System.out.println("The game already wasn't started.");
+            return;
+        }
+
+        if (board.gameIsFinished()){
+            System.out.println("Congrats! you have concluded the game successfully!");
+            showCurrentGame();
+            board = null;
+        } else if (board.hasErrors()){
+            System.out.println("Has errors in your board, verify and adjust it");
+        } else{
+            System.out.println("You must fill all spaces in the board.");
+        }
     }
-
-    private static void clearGame() {
-    }
-
-    private static void showGameStatus() {
-    }
-
-    private static void showCurrentGame() {
-    }
-
-
 
 
     private static int runUntilGetValidNumber(final int min, final int max) {

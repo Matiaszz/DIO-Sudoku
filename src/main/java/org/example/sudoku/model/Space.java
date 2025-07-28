@@ -15,12 +15,12 @@ public class Space {
         if (fixed) actual = expected;
     }
 
-    public void setActual(final int actual) {
+    public void setActual(final Integer actual) {
         if (this.fixed) return;
         this.actual = actual;
     }
 
     public void clearSpace(){
-        this.actual = null;
+        setActual(null);
     }
 }
