@@ -29,7 +29,7 @@ public class Main {
                         v-> v.split(";")[1]
                 ));
 
-        var option = -1;
+        int option = -1;
 
         while (true){
             System.out.println("Choice one option");
@@ -42,7 +42,7 @@ public class Main {
             System.out.println("7 - Finish game");
             System.out.println("8 - Exit");
 
-            option = sc.nextInt(); sc.nextLine();
+            option = sc.nextInt();
 
             switch (option){
                 case 1 -> startGame(positions);
@@ -72,7 +72,7 @@ public class Main {
         for (int i = 0; i < BOARD_LIMIT; i++){
             spaces.add(new ArrayList<>());
             for (int j = 0; j < BOARD_LIMIT; j++) {
-                var positionConfig = positions.get("%s.%s".formatted(i,j));
+                var positionConfig = positions.get("%s,%s".formatted(i,j));
                 var expected = Integer.parseInt(positionConfig.split(",")[0]);
                 var fixed = Boolean.parseBoolean(positionConfig.split(",")[1]);
 
@@ -137,14 +137,23 @@ public class Main {
 
 
 
-    private static int runUntilGetValidNumber(final int min, final int max){
-        int current = sc.nextInt(); sc.nextLine();
+    private static int runUntilGetValidNumber(final int min, final int max) {
+        int current = -1;
 
-        while (current < min || current > max){
-            System.out.printf("Type a number between %s and %s\n", min, max);
-            current = sc.nextInt(); sc.nextLine();
+        while (true) {
+            System.out.printf("Type a number between %s and %s: ", min, max);
+
+            if (sc.hasNextInt()) {
+                current = sc.nextInt();
+                sc.nextLine();
+
+                if (current >= min && current <= max) return current;
+                System.out.println("Number out of range.");
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+            }
         }
-        return current;
     }
 
     private static List<Integer> getColAndRow(){
